@@ -40,6 +40,8 @@ export function createContext<T>(
     // there to be two concurrent renderers at most: React Native (primary) and
     // Fabric (secondary); React DOM (primary) and React ART (secondary).
     // Secondary renderers store their context values on separate fields.
+    // 记录Provider上提供的value有变化的情况下更新到currentValue
+    // Consumer进行渲染的时候获取value拿到最新的context的值
     _currentValue: defaultValue,
     _currentValue2: defaultValue,
     // Used to track how many concurrent renderers this context currently
@@ -52,6 +54,7 @@ export function createContext<T>(
 
   context.Provider = {
     $$typeof: REACT_PROVIDER_TYPE,
+    //_context指向自身
     _context: context,
   };
 
@@ -126,6 +129,7 @@ export function createContext<T>(
     // $FlowFixMe: Flow complains about missing properties because it doesn't understand defineProperty
     context.Consumer = Consumer;
   } else {
+    // Consumer指向自身
     context.Consumer = context;
   }
 
