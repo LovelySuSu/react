@@ -8,7 +8,8 @@
 import {REACT_FORWARD_REF_TYPE, REACT_MEMO_TYPE} from 'shared/ReactSymbols';
 
 import warningWithoutStack from 'shared/warningWithoutStack';
-
+// forwardRef是用来解决函数组件或HOC组件传递ref的问题的，
+// 所谓HOC就是Higher Order Component，比如使用redux的时候，我们用connect来给组件绑定需要的state，这其中其实就是给我们的组件在外部包了一层组件，然后通过...props的方式把外部的props传入到实际组件
 export default function forwardRef<Props, ElementType: React$ElementType>(
   render: (props: Props, ref: React$Ref<ElementType>) => React$Node,
 ) {
@@ -48,6 +49,6 @@ export default function forwardRef<Props, ElementType: React$ElementType>(
 
   return {
     $$typeof: REACT_FORWARD_REF_TYPE,
-    render,
+    render, // 传递进来的functionalComponent
   };
 }
