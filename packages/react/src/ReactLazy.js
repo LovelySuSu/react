@@ -9,14 +9,16 @@ import type {LazyComponent, Thenable} from 'shared/ReactLazyComponent';
 
 import {REACT_LAZY_TYPE} from 'shared/ReactSymbols';
 import warning from 'shared/warning';
-
+/**
+ * @ param ctor: 接收一个方法，返回promise的方法，返回lazyComponent
+ * */
 export function lazy<T, R>(ctor: () => Thenable<T, R>): LazyComponent<T> {
   let lazyType = {
     $$typeof: REACT_LAZY_TYPE,
     _ctor: ctor,
     // React uses these fields to store the result.
-    _status: -1,
-    _result: null,
+    _status: -1, // 记录Thenable对象当前状态，resolve和reject后_status会发生变化，渲染时进行不一样的处理
+    _result: null, // 最终resolve出来的组件，拿它来进行渲染
   };
 
   if (__DEV__) {
