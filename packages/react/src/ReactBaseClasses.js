@@ -22,6 +22,7 @@ function Component(props, context, updater) {
   this.props = props;
   this.context = context;
   // If a component has string refs, we will assign a different object later.
+  // 想要获取的节点实例挂载到this.ref上
   this.refs = emptyObject;
   // We initialize the default updater but the real one gets injected by the
   // renderer.
@@ -55,6 +56,11 @@ Component.prototype.isReactComponent = {};
  * @final
  * @protected
  */
+// 原型上setState方法,更新组件状态
+/**
+ * @param partialState 更新的新的state
+ * @param callback state更新完成后执行callback
+ * */
 Component.prototype.setState = function(partialState, callback) {
   invariant(
     typeof partialState === 'object' ||
@@ -63,6 +69,7 @@ Component.prototype.setState = function(partialState, callback) {
     'setState(...): takes an object of state variables to update or a ' +
       'function which returns an object of state variables.',
   );
+  // 不同的平台上不同平台传入updater来定制自己的实现方式
   this.updater.enqueueSetState(this, partialState, callback, 'setState');
 };
 
@@ -81,6 +88,7 @@ Component.prototype.setState = function(partialState, callback) {
  * @protected
  */
 Component.prototype.forceUpdate = function(callback) {
+  // 强制React Component更新
   this.updater.enqueueForceUpdate(this, callback, 'forceUpdate');
 };
 
@@ -135,11 +143,13 @@ function PureComponent(props, context, updater) {
   this.refs = emptyObject;
   this.updater = updater || ReactNoopUpdateQueue;
 }
-
+// PureComponent继承自Component
 const pureComponentPrototype = (PureComponent.prototype = new ComponentDummy());
 pureComponentPrototype.constructor = PureComponent;
 // Avoid an extra prototype jump for these methods.
+// Component的属性拷贝到PureComponent
 Object.assign(pureComponentPrototype, Component.prototype);
+// isPureReactComponent标识继承自PureComponent的组件是PureComponent
 pureComponentPrototype.isPureReactComponent = true;
 
 export {Component, PureComponent};

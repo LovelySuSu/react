@@ -303,9 +303,9 @@ export function jsxDEV(type, config, maybeKey, source, self) {
  * See https://reactjs.org/docs/react-api.html#createelement
  */
 /**
- * @type 节点类型，原生节点为字符串，如果是自己声明的组件，则为ClassComponent或functionComponent
- * @config 写在jsx上的所有attrs,以key-value的形式存放在config对象上
- * @children 标签中间放的内容，子标签或文字
+ * @param type 节点类型，原生节点为字符串，如果是自己声明的组件，则为ClassComponent或functionComponent
+ * @param config 写在jsx上的所有attrs,以key-value的形式存放在config对象上
+ * @param children 标签中间放的内容，子标签或文字
  */
 export function createElement(type, config, children) {
   let propName;
