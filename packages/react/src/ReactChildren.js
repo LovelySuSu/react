@@ -58,6 +58,7 @@ function getPooledTraverseContext(
   mapFunction,
   mapContext,
 ) {
+  // 是否有已存在的节点
   if (traverseContextPool.length) {
     const traverseContext = traverseContextPool.pop();
     traverseContext.result = mapResult;
@@ -78,11 +79,14 @@ function getPooledTraverseContext(
 }
 
 function releaseTraverseContext(traverseContext) {
+  // 把Context内容情况
   traverseContext.result = null;
   traverseContext.keyPrefix = null;
   traverseContext.func = null;
   traverseContext.context = null;
   traverseContext.count = 0;
+  // 判断context池个数是否小于限定值，不大于就存储进去
+  // mapFunction如果展开层数比较多，声明对象也比较多，然后再释放，会造成内存抖动，因此设置pool来避免这种情况，进行复用
   if (traverseContextPool.length < POOL_SIZE) {
     traverseContextPool.push(traverseContext);
   }
@@ -110,7 +114,7 @@ function traverseAllChildrenImpl(
   }
 
   let invokeCallback = false;
-
+  // 如果是可以直接渲染的单个节点
   if (children === null) {
     invokeCallback = true;
   } else {
@@ -127,7 +131,7 @@ function traverseAllChildrenImpl(
         }
     }
   }
-
+  // 执行callback,即mapSingleChildIntoContext
   if (invokeCallback) {
     callback(
       traverseContext,
@@ -144,7 +148,7 @@ function traverseAllChildrenImpl(
   let subtreeCount = 0; // Count of children found in the current subtree.
   const nextNamePrefix =
     nameSoFar === '' ? SEPARATOR : nameSoFar + SUBSEPARATOR;
-
+  // 如果是数组，则进行递归直到传入的是单个节点执行callback
   if (Array.isArray(children)) {
     for (let i = 0; i < children.length; i++) {
       child = children[i];
@@ -284,11 +288,15 @@ function forEachChildren(children, forEachFunc, forEachContext) {
   traverseAllChildren(children, forEachSingleChild, traverseContext);
   releaseTraverseContext(traverseContext);
 }
-
+/**
+ * @param bookKeeping: context
+ * @param child: 最终遍历出的单个节点
+ * */
 function mapSingleChildIntoContext(bookKeeping, child, childKey) {
+  // func是外部传入的函数
   const {result, keyPrefix, func, context} = bookKeeping;
-
   let mappedChild = func.call(context, child, bookKeeping.count++);
+  // 返回的如果是数组，会再次执行mapIntoWithKeyPrefixInternal
   if (Array.isArray(mappedChild)) {
     mapIntoWithKeyPrefixInternal(mappedChild, result, childKey, c => c);
   } else if (mappedChild != null) {
@@ -313,6 +321,7 @@ function mapIntoWithKeyPrefixInternal(children, array, prefix, func, context) {
   if (prefix != null) {
     escapedPrefix = escapeUserProvidedKey(prefix) + '/';
   }
+  // 对象池
   const traverseContext = getPooledTraverseContext(
     array,
     escapedPrefix,
