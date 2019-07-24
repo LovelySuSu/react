@@ -87,9 +87,9 @@ const React = {
   useRef,
   useState,
 
-  Fragment: REACT_FRAGMENT_TYPE,
+  Fragment: REACT_FRAGMENT_TYPE, // <React.Fragment></React.Fragment>等价于<></> 不会生成多余节点
   Profiler: REACT_PROFILER_TYPE,
-  StrictMode: REACT_STRICT_MODE_TYPE,
+  StrictMode: REACT_STRICT_MODE_TYPE, // 标识子树节点中如果使用过期的方法则提醒
   Suspense: REACT_SUSPENSE_TYPE,
   unstable_SuspenseList: REACT_SUSPENSE_LIST_TYPE,
 

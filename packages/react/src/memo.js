@@ -11,8 +11,8 @@ import isValidElementType from 'shared/isValidElementType';
 import warningWithoutStack from 'shared/warningWithoutStack';
 
 export default function memo<Props>(
-  type: React$ElementType,
-  compare?: (oldProps: Props, newProps: Props) => boolean,
+  type: React$ElementType,// functionalComponent
+  compare?: (oldProps: Props, newProps: Props) => boolean, // 是否进行更新
 ) {
   if (__DEV__) {
     if (!isValidElementType(type)) {

@@ -432,6 +432,7 @@ export function cloneAndReplaceKey(oldElement, newKey) {
  * Clone and return a new ReactElement using element as the starting point.
  * See https://reactjs.org/docs/react-api.html#cloneelement
  */
+// 克隆Element
 export function cloneElement(element, config, children) {
   invariant(
     !(element === null || element === undefined),
