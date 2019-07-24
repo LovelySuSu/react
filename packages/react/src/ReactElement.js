@@ -319,7 +319,7 @@ export function createElement(type, config, children) {
   let source = null;
 
   if (config != null) {
-    // 判断config中有没有ref,读到ref中
+    // 判断config中有没有ref,读到ref中,ref用于获取某个dom节点或子节点实例来进行手动操作
     if (hasValidRef(config)) {
       ref = config.ref;
     }
