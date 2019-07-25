@@ -40,7 +40,7 @@ type BaseFiberRootProperties = {|
   // Used only by persistent updates.
   pendingChildren: any,
   // The currently active root fiber. This is the mutable root of the tree.
-  // 当前应用对应的Fiber对象，是Root Fiber(任意一个ReactElement都对应一个Fiber对象)
+  // 指向应用对应的Fiber对象，是Root Fiber(任意一个ReactElement都对应一个Fiber对象)，RootFiber的child即为App
   current: Fiber,
 
   pingCache:
@@ -131,6 +131,7 @@ export function createFiberRoot(
 
   // Cyclic construction. This cheats the type system right now because
   // stateNode is any.
+  // Fiber对象：每一个ReactElement对应一个Fiber对象，记录节点的各种状态，串联整个应用形成树结构
   const uninitializedFiber = createHostRootFiber(tag);
   root.current = uninitializedFiber;
   uninitializedFiber.stateNode = root;

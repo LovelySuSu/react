@@ -301,6 +301,12 @@ export function createContainer(
   tag: RootTag,
   hydrate: boolean,
 ): OpaqueRoot {
+  /**
+   * 调用createFiberRoot实现了
+   * 创建FiberRoot根节点指向RootFiber对象，RootFiber的child指向App节点，App的child指向子节点，子节点通过sibling指向兄弟节点
+   * 一个链表结构将所有节点串联起来
+   * RootFiber的stateNode指向FiberRoot，child节点的return指向父节点
+   * */
   return createFiberRoot(containerInfo, tag, hydrate);
 }
 /**

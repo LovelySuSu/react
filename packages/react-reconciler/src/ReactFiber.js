@@ -144,6 +144,7 @@ export type Fiber = {|
   type: any,
 
   // The local state associated with this fiber.
+  // 对应节点的实际实例（比如浏览器环境就是DOM节点），应用数据更新完成后放到节点上
   stateNode: any,
 
   // Conceptual aliases
@@ -156,11 +157,11 @@ export type Fiber = {|
   // This is effectively the parent, but there can be multiple parents (two)
   // so this is only the parent of the thing we're currently processing.
   // It is conceptually the same as the return address of a stack frame.
-  return: Fiber | null,
+  return: Fiber | null, // 指向父节点
 
   // Singly Linked List Tree Structure.
-  child: Fiber | null,
-  sibling: Fiber | null,
+  child: Fiber | null, // 指向子节点
+  sibling: Fiber | null, // 指向兄弟节点
   index: number,
 
   // The ref last used to attach this node.
@@ -168,13 +169,13 @@ export type Fiber = {|
   ref: null | (((handle: mixed) => void) & {_stringRef: ?string}) | RefObject,
 
   // Input is the data coming into process this fiber. Arguments. Props.
-  pendingProps: any, // This type will be more specific once we overload the tag.
-  memoizedProps: any, // The props used to create the output.
+  pendingProps: any, // 新的变动带来的新的props
+  memoizedProps: any, // 上一次渲染完成之后的props
 
   // A queue of state updates and callbacks.
   updateQueue: UpdateQueue<any> | null,
 
-  // The state used to create the output
+  // 上一次渲染的时候的state
   memoizedState: any,
 
   // Dependencies (contexts, events) for this fiber, if it has any
