@@ -331,6 +331,7 @@ export function updateContainer(
     }
   }
   const suspenseConfig = requestCurrentSuspenseConfig();
+  // 计算过期时间
   const expirationTime = computeExpirationForFiber(
     currentTime,
     current,

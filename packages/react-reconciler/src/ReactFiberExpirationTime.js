@@ -31,6 +31,9 @@ const MAGIC_NUMBER_OFFSET = Batched - 1;
 // 1 unit of expiration time represents 10ms.
 export function msToExpirationTime(ms: number): ExpirationTime {
   // Always add an offset so that we don't clash with the magic number for NoWork.
+  /**
+   * ((ms / UNIT_SIZE) | 0) 即取整
+   * */
   return MAGIC_NUMBER_OFFSET - ((ms / UNIT_SIZE) | 0);
 }
 
@@ -93,6 +96,10 @@ export function computeSuspenseExpiration(
 // expiration time in development.
 //
 // In production we opt for better UX at the risk of masking scheduling
+
+/***
+ * React 中有两种类型的ExpirationTime，一个是Interactive的，另一种是普通的异步computeAsyncExpiration。Interactive的比如说是由事件触发的，那么他的响应优先级会比较高因为涉及到交互
+ */
 // problems, by expiring fast.
 export const HIGH_PRIORITY_EXPIRATION = __DEV__ ? 500 : 150;
 export const HIGH_PRIORITY_BATCH_SIZE = 100;

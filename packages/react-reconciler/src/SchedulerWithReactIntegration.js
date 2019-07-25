@@ -81,6 +81,7 @@ let initialTimeMs: number = Scheduler_now();
 // within 32 bits.
 // TODO: Consider lifting this into Scheduler.
 export const now =
+  // 最近的update完成的时间点
   initialTimeMs < 10000 ? Scheduler_now : () => Scheduler_now() - initialTimeMs;
 
 export function getCurrentPriorityLevel(): ReactPriorityLevel {
