@@ -63,7 +63,10 @@ function computeExpirationBucket(
 // the names to reflect.
 export const LOW_PRIORITY_EXPIRATION = 5000;
 export const LOW_PRIORITY_BATCH_SIZE = 250;
-
+/**
+ * 异步任务优先级比较低，可以一直被打断，所以设置一个时间
+ * 在这个时间内可以被打断，当超过时间还没执行就会强制执行
+ * */
 export function computeAsyncExpiration(
   currentTime: ExpirationTime,
 ): ExpirationTime {
