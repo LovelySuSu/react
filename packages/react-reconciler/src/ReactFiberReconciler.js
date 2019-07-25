@@ -170,6 +170,7 @@ function scheduleRootUpdate(
     flushPassiveEffects();
   }
   enqueueUpdate(current, update);
+  // 有更新产生。进行任务调度
   scheduleWork(current, expirationTime);
 
   return expirationTime;
@@ -294,7 +295,7 @@ function findHostInstanceWithWarning(
   }
   return findHostInstance(component);
 }
-
+// 创建FiberRoot
 export function createContainer(
   containerInfo: Container,
   tag: RootTag,
@@ -302,7 +303,10 @@ export function createContainer(
 ): OpaqueRoot {
   return createFiberRoot(containerInfo, tag, hydrate);
 }
-
+/**
+ * @param element 传进去的实际组件，即<App/>
+ * @param container Dom节点
+ * */
 export function updateContainer(
   element: ReactNodeList,
   container: OpaqueRoot,

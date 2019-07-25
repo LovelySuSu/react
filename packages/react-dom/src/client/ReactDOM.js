@@ -370,6 +370,7 @@ function ReactSyncRoot(
   hydrate: boolean,
 ) {
   // Tag is either LegacyRoot or Concurrent Root
+  // 创建root节点
   const root = createContainer(container, tag, hydrate);
   this._internalRoot = root;
 }
@@ -461,6 +462,7 @@ function isValidContainer(node) {
 }
 
 function getReactRootElementInContainer(container: any) {
+  // 判断传入的container是否有子节点
   if (!container) {
     return null;
   }
@@ -471,7 +473,7 @@ function getReactRootElementInContainer(container: any) {
     return container.firstChild;
   }
 }
-
+// 是否需要合并老的html节点和第一次渲染节点
 function shouldHydrateDueToLegacyHeuristic(container) {
   const rootElement = getReactRootElementInContainer(container);
   return !!(
@@ -490,6 +492,9 @@ setBatchingImplementation(
 
 let warnedAboutHydrateAPI = false;
 
+/**
+ * @param forceHydrate 调和ssr和普通web页面。dom节点是否复用
+ * */
 function legacyCreateRootFromDOMContainer(
   container: DOMContainer,
   forceHydrate: boolean,
@@ -497,9 +502,11 @@ function legacyCreateRootFromDOMContainer(
   const shouldHydrate =
     forceHydrate || shouldHydrateDueToLegacyHeuristic(container);
   // First clear any existing content.
+  // 无服务端渲染的情况下为false
   if (!shouldHydrate) {
     let warned = false;
     let rootSibling;
+    // 将container下子节点进行删除
     while ((rootSibling = container.lastChild)) {
       if (__DEV__) {
         if (
@@ -552,7 +559,7 @@ function legacyRenderSubtreeIntoContainer(
   let root: _ReactSyncRoot = (container._reactRootContainer: any);
   let fiberRoot;
   if (!root) {
-    // Initial mount
+    // 首次渲染创建reactRootContainer
     root = container._reactRootContainer = legacyCreateRootFromDOMContainer(
       container,
       forceHydrate,
@@ -655,7 +662,11 @@ const ReactDOM: Object = {
       callback,
     );
   },
-
+  /**
+   * @param element 即ReactElement
+   * @param container 挂载到哪个节点上
+   * @param callback 应用挂载结束后的回调
+   * */
   render(
     element: React$Element<any>,
     container: DOMContainer,
