@@ -35,10 +35,12 @@ type BaseFiberRootProperties = {|
   tag: RootTag,
 
   // Any additional information from the host associated with this root.
+  // root节点，render方法接收的第二个参数,即应该挂载的节点
   containerInfo: any,
   // Used only by persistent updates.
   pendingChildren: any,
   // The currently active root fiber. This is the mutable root of the tree.
+  // 当前应用对应的Fiber对象，是Root Fiber(任意一个ReactElement都对应一个Fiber对象)
   current: Fiber,
 
   pingCache:
@@ -124,6 +126,7 @@ export function createFiberRoot(
   tag: RootTag,
   hydrate: boolean,
 ): FiberRoot {
+  // FiberRoot 1.整个应用的起点 2.包含应用挂载的目标节点 3.记录整个应用更新过程的各种信息
   const root: FiberRoot = (new FiberRootNode(containerInfo, tag, hydrate): any);
 
   // Cyclic construction. This cheats the type system right now because
