@@ -149,7 +149,10 @@ function scheduleRootUpdate(
       );
     }
   }
-
+ /**
+  * 创建update
+  * Update 1.用于记录组件状态的改变 2.存放于updateQueue中 3.多个Update可以同时存在
+  * */
   const update = createUpdate(expirationTime, suspenseConfig);
   // Caution: React DevTools currently depends on this property
   // being called "element".

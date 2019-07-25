@@ -125,9 +125,11 @@ export type Update<State> = {
 };
 
 export type UpdateQueue<State> = {
+  // 每次操作完更新之后的`state`
   baseState: State,
-
+  // 队列中的第一个`Update`
   firstUpdate: Update<State> | null,
+  // 队列中的最后一个`Update`
   lastUpdate: Update<State> | null,
 
   firstCapturedUpdate: Update<State> | null,
@@ -207,6 +209,7 @@ export function createUpdate(
     suspenseConfig,
 
     tag: UpdateState,
+    // 更新内容，比如`setState`接收的第一个参数
     payload: null,
     callback: null,
 
@@ -228,13 +231,16 @@ function appendUpdateToQueue<State>(
     // Queue is empty
     queue.firstUpdate = queue.lastUpdate = update;
   } else {
+    // 添加update至末尾
     queue.lastUpdate.next = update;
     queue.lastUpdate = update;
   }
 }
 
+// 创建或更新UpdateQueue的过程
 export function enqueueUpdate<State>(fiber: Fiber, update: Update<State>) {
   // Update queues are created lazily.
+  // alternate指workInProcess
   const alternate = fiber.alternate;
   let queue1;
   let queue2;
@@ -243,6 +249,7 @@ export function enqueueUpdate<State>(fiber: Fiber, update: Update<State>) {
     queue1 = fiber.updateQueue;
     queue2 = null;
     if (queue1 === null) {
+      // 创建UpdateQueue
       queue1 = fiber.updateQueue = createUpdateQueue(fiber.memoizedState);
     }
   } else {
