@@ -79,7 +79,7 @@ function getPooledTraverseContext(
 }
 
 function releaseTraverseContext(traverseContext) {
-  // 把Context内容情况
+  // 把Context内容清空
   traverseContext.result = null;
   traverseContext.keyPrefix = null;
   traverseContext.func = null;

@@ -356,7 +356,11 @@ export function computeUniqueAsyncExpiration(): ExpirationTime {
   lastUniqueAsyncExpiration = result;
   return result;
 }
-
+/**
+ * @param fiber:Fiber对象
+ * @param expirationTime: 创建update时计算的过期时间
+ *
+ * */
 export function scheduleUpdateOnFiber(
   fiber: Fiber,
   expirationTime: ExpirationTime,
@@ -432,10 +436,8 @@ export function scheduleUpdateOnFiber(
 }
 export const scheduleWork = scheduleUpdateOnFiber;
 
-// This is split into a separate function so we can mark a fiber with pending
-// work without treating it as a typical update that originates from an event;
-// e.g. retrying a Suspense boundary isn't an update, but it does schedule work
-// on a fiber.
+
+// 根据传入的fiber节点找到对应的RootFiber对象,从而找到FiberRoot
 function markUpdateTimeFromFiberToRoot(fiber, expirationTime) {
   // Update the source fiber's expiration time
   if (fiber.expirationTime < expirationTime) {
@@ -446,11 +448,12 @@ function markUpdateTimeFromFiberToRoot(fiber, expirationTime) {
     alternate.expirationTime = expirationTime;
   }
   // Walk the parent path to the root and update the child expiration time.
-  let node = fiber.return;
+  let node = fiber.return; // 寻找父级fiber
   let root = null;
-  if (node === null && fiber.tag === HostRoot) {
-    root = fiber.stateNode;
+  if (node === null && fiber.tag === HostRoot) { // 为RootFiber
+    root = fiber.stateNode; // RootFiber的stateNode为FiberRoot
   } else {
+    //
     while (node !== null) {
       alternate = node.alternate;
       if (node.childExpirationTime < expirationTime) {

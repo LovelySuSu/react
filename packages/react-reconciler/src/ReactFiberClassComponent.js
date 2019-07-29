@@ -179,7 +179,7 @@ export function applyDerivedStateFromProps(
     updateQueue.baseState = memoizedState;
   }
 }
-
+// setState,forceUpdate给节点的Fiber创建更新
 const classComponentUpdater = {
   isMounted,
   enqueueSetState(inst, payload, callback) {
@@ -208,7 +208,7 @@ const classComponentUpdater = {
     scheduleWork(fiber, expirationTime);
   },
   enqueueReplaceState(inst, payload, callback) {
-    const fiber = getInstance(inst);
+    const fiber = getInstance(inst); // 调用this.setState中获取的this,获取fiber对象
     const currentTime = requestCurrentTime();
     const suspenseConfig = requestCurrentSuspenseConfig();
     const expirationTime = computeExpirationForFiber(
@@ -231,6 +231,7 @@ const classComponentUpdater = {
     if (revertPassiveEffectsChange) {
       flushPassiveEffects();
     }
+    // 更新UpdateQueue
     enqueueUpdate(fiber, update);
     scheduleWork(fiber, expirationTime);
   },
